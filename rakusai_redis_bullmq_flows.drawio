@@ -1,0 +1,307 @@
+<mxfile host="app.diagrams.net" agent="claude">
+  <diagram name="Rakusai Redis BullMQ Flows" id="rakusai-redis-flows">
+    <mxGraphModel dx="2343" dy="1243" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1650" pageHeight="1550" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=20;align=center;verticalAlign=middle;fontStyle=1;fontColor=#1F3864;align=left;" value="Rakusai — Redis / BullMQ Usage Flows (Developer Reference)" vertex="1">
+          <mxGeometry height="40" width="1100" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CCCCCC;fontSize=11;align=center;verticalAlign=middle;rounded=1;" value="" vertex="1">
+          <mxGeometry height="100" width="280" x="1330" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_title" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=12;align=center;verticalAlign=middle;fontStyle=1;align=left;" value="Job Type Legend" vertex="1">
+          <mxGeometry height="20" width="260" x="1340" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;align=center;verticalAlign=middle;" value="" vertex="1">
+          <mxGeometry height="16" width="24" x="1340" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_1t" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=11;align=center;verticalAlign=middle;align=left;" value="Immediate job" vertex="1">
+          <mxGeometry height="20" width="230" x="1370" y="48" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=11;align=center;verticalAlign=middle;" value="" vertex="1">
+          <mxGeometry height="16" width="24" x="1340" y="76" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_2t" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=11;align=center;verticalAlign=middle;align=left;" value="Delayed job (fixed delay)" vertex="1">
+          <mxGeometry height="20" width="230" x="1370" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;align=center;verticalAlign=middle;" value="" vertex="1">
+          <mxGeometry height="16" width="24" x="1330" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_3t" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=11;align=center;verticalAlign=middle;align=left;" value="Repeatable job (cron)" vertex="1">
+          <mxGeometry height="20" width="230" x="1360" y="176" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;align=center;verticalAlign=middle;" value="" vertex="1">
+          <mxGeometry height="16" width="24" x="1330" y="204" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_4t" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=11;align=center;verticalAlign=middle;align=left;" value="Worker processing" vertex="1">
+          <mxGeometry height="20" width="230" x="1360" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=11;align=center;verticalAlign=middle;" value="" vertex="1">
+          <mxGeometry height="16" width="24" x="1330" y="228" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_5t" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=11;align=center;verticalAlign=middle;align=left;" value="Retry / backoff / failure" vertex="1">
+          <mxGeometry height="20" width="230" x="1360" y="224" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="" vertex="1">
+          <mxGeometry height="16" width="24" x="1330" y="252" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_6t" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=11;align=center;verticalAlign=middle;align=left;" value="Result written to DB" vertex="1">
+          <mxGeometry height="20" width="230" x="1360" y="248" as="geometry" />
+        </mxCell>
+        <mxCell id="laneA_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFBFF;strokeColor=#B0C4E8;fontSize=12;align=center;verticalAlign=middle;rounded=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontColor=#1F3864;" value="Queue: notification-queue  —  handles ALL SMS/Email, candidate-facing and internal" vertex="1">
+          <mxGeometry height="170" width="1570" x="30" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="A1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;verticalAlign=middle;" value="TRIGGER Candidate passed dedupe/blacklist OR internal event (submit / approve / reject)" vertex="1">
+          <mxGeometry height="65" width="230" x="60" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="A2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;align=center;verticalAlign=middle;" value="Enqueue Job notification-queue [IMMEDIATE]" vertex="1">
+          <mxGeometry height="65" width="200" x="330" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="A3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;align=center;verticalAlign=middle;" value="Worker Send via SMS / Email provider adapter" vertex="1">
+          <mxGeometry height="65" width="200" x="580" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="A4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="SUCCESS notifications.status = sent" vertex="1">
+          <mxGeometry height="55" width="220" x="830" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=11;align=center;verticalAlign=middle;" value="FAILURE Retry with backoff (bounded attempts)" vertex="1">
+          <mxGeometry height="55" width="220" x="830" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="A6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=11;align=center;verticalAlign=middle;" value="Attempts exhausted notifications.status = failed (visible to HQ)" vertex="1">
+          <mxGeometry height="55" width="250" x="1100" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="laneE_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBF5;strokeColor=#E0B84A;fontSize=12;align=center;verticalAlign=middle;rounded=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontColor=#8A6D1E;" value="Queue: matching-queue  —  auto-match candidate to an interview slot after survey submission (coordinates WHICH slot to try; the actual booking still goes through the DB transaction + row lock in Section 6.4)" vertex="1">
+          <mxGeometry height="180" width="1570" x="30" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="E1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;verticalAlign=middle;" value="TRIGGER Candidate submits survey (preferred_dates: priority 1, 2, 3)" vertex="1">
+          <mxGeometry height="70" width="230" x="60" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="E2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;align=center;verticalAlign=middle;" value="Enqueue job match-candidate-slot [IMMEDIATE]" vertex="1">
+          <mxGeometry height="70" width="200" x="330" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="E3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;align=center;verticalAlign=middle;" value="Worker: try each preferred slot in priority order (DB transaction + row lock per attempt — Section 6.4)" vertex="1">
+          <mxGeometry height="70" width="230" x="580" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="E4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="MATCHED create interview_schedules -&gt; notification-queue (confirm)" vertex="1">
+          <mxGeometry height="55" width="250" x="860" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="E5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=11;align=center;verticalAlign=middle;" value="NO SLOT AVAILABLE candidates.status = interview_adjustment_needed -&gt; notification-queue (notify SM)" vertex="1">
+          <mxGeometry height="55" width="260" x="860" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="laneB_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFBFF;strokeColor=#D9C2E0;fontSize=12;align=center;verticalAlign=middle;rounded=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontColor=#5C3566;" value="Queue: reminder-queue  —  delayed &amp; repeatable jobs (4 independent flows)" vertex="1">
+          <mxGeometry height="400" width="1570" x="30" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="B1a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;verticalAlign=middle;" value="Survey link sent candidate.status = survey_sent" vertex="1">
+          <mxGeometry height="55" width="200" x="60" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="B1b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=11;align=center;verticalAlign=middle;" value="Enqueue delayed job auto-decline-candidate [DELAYED +5 days]" vertex="1">
+          <mxGeometry height="55" width="210" x="310" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="B1c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="Candidate submits before due -&gt; job.remove() (cancelled)" vertex="1">
+          <mxGeometry height="45" width="210" x="570" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="B1d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;align=center;verticalAlign=middle;" value="No submission by due date -&gt; worker fires at +5d" vertex="1">
+          <mxGeometry height="45" width="210" x="570" y="625" as="geometry" />
+        </mxCell>
+        <mxCell id="B1e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="candidates.status = no_response + enqueue RikuOp outbound sync" vertex="1">
+          <mxGeometry height="45" width="260" x="830" y="625" as="geometry" />
+        </mxCell>
+        <mxCell id="B2a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;verticalAlign=middle;" value="interview_schedules created status = scheduled" vertex="1">
+          <mxGeometry height="50" width="200" x="60" y="685" as="geometry" />
+        </mxCell>
+        <mxCell id="B2b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=11;align=center;verticalAlign=middle;" value="Enqueue delayed job interview-reminder [DELAYED = interview_time - 24h]" vertex="1">
+          <mxGeometry height="50" width="210" x="310" y="685" as="geometry" />
+        </mxCell>
+        <mxCell id="B2c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;align=center;verticalAlign=middle;" value="Worker fires at T-24h" vertex="1">
+          <mxGeometry height="50" width="210" x="570" y="685" as="geometry" />
+        </mxCell>
+        <mxCell id="B2d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;align=center;verticalAlign=middle;" value="Enqueue into notification-queue (candidate reminder message)" vertex="1">
+          <mxGeometry height="50" width="260" x="830" y="685" as="geometry" />
+        </mxCell>
+        <mxCell id="B3a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;verticalAlign=middle;" value="job_requirements.status = pending_am" vertex="1">
+          <mxGeometry height="50" width="200" x="60" y="765" as="geometry" />
+        </mxCell>
+        <mxCell id="B3b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;align=center;verticalAlign=middle;" value="Enqueue repeatable job approval-reminder [REPEAT daily, start +3d]" vertex="1">
+          <mxGeometry height="50" width="210" x="310" y="765" as="geometry" />
+        </mxCell>
+        <mxCell id="B3c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;align=center;verticalAlign=middle;" value="Worker checks: still pending_am ?" vertex="1">
+          <mxGeometry height="50" width="210" x="570" y="765" as="geometry" />
+        </mxCell>
+        <mxCell id="B3d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="YES -&gt; send reminder (-&gt; notification-queue)" vertex="1">
+          <mxGeometry height="40" width="250" x="830" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="B3e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="NO -&gt; stop repeat (job removed)" vertex="1">
+          <mxGeometry height="40" width="250" x="830" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="B4a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;verticalAlign=middle;" value="job_requirements.status = rejected" vertex="1">
+          <mxGeometry height="50" width="200" x="60" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="B4b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;align=center;verticalAlign=middle;" value="Enqueue repeatable job edit-reminder [REPEAT daily, start +3d]" vertex="1">
+          <mxGeometry height="50" width="210" x="310" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="B4c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;align=center;verticalAlign=middle;" value="Worker checks: still rejected ?" vertex="1">
+          <mxGeometry height="50" width="210" x="570" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="B4d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="YES -&gt; send reminder (-&gt; notification-queue)" vertex="1">
+          <mxGeometry height="40" width="250" x="830" y="835" as="geometry" />
+        </mxCell>
+        <mxCell id="B4e" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="NO -&gt; stop repeat (job removed)" vertex="1">
+          <mxGeometry height="40" width="250" x="830" y="885" as="geometry" />
+        </mxCell>
+        <mxCell id="laneC_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFBFF;strokeColor=#B9DAB0;fontSize=12;align=center;verticalAlign=middle;rounded=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontColor=#3A6B2A;" value="Queue: rikuop-sync-queue  —  inbound &amp; outbound integration with RikuOp" vertex="1">
+          <mxGeometry height="210" width="1570" x="30" y="970" as="geometry" />
+        </mxCell>
+        <mxCell id="C1a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;verticalAlign=middle;" value="Candidate / schedule status changed in Rakusai" vertex="1">
+          <mxGeometry height="55" width="200" x="60" y="1010" as="geometry" />
+        </mxCell>
+        <mxCell id="C1b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;align=center;verticalAlign=middle;" value="Enqueue job rikuop-outbound-sync [IMMEDIATE + retry/backoff]" vertex="1">
+          <mxGeometry height="55" width="210" x="310" y="1010" as="geometry" />
+        </mxCell>
+        <mxCell id="C1c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;align=center;verticalAlign=middle;" value="Worker calls RikuOp API" vertex="1">
+          <mxGeometry height="55" width="210" x="570" y="1010" as="geometry" />
+        </mxCell>
+        <mxCell id="C1d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="Log result -&gt; rikuop_sync_logs (success / failed)" vertex="1">
+          <mxGeometry height="55" width="260" x="830" y="1010" as="geometry" />
+        </mxCell>
+        <mxCell id="C2a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;verticalAlign=middle;" value="RikuOp sends webhook (new candidate intake)" vertex="1">
+          <mxGeometry height="60" width="200" x="60" y="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="C2b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;align=center;verticalAlign=middle;" value="Controller: validate signature, enqueue job, return 200 immediately (no heavy work in HTTP path)" vertex="1">
+          <mxGeometry height="60" width="210" x="310" y="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="C2c" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;align=center;verticalAlign=middle;" value="Worker rikuop-inbound-candidate [IMMEDIATE]" vertex="1">
+          <mxGeometry height="60" width="210" x="570" y="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="C2d" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="Dedupe / blacklist check -&gt; create candidate -&gt; enqueue notification-queue" vertex="1">
+          <mxGeometry height="60" width="260" x="830" y="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="laneD_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFBFF;strokeColor=#E8D9AE;fontSize=12;align=center;verticalAlign=middle;rounded=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontColor=#8A6D1E;" value="Queue: import-queue  —  bulk master data import (Area / Store / SM / Sub-SM / AM)" vertex="1">
+          <mxGeometry height="140" width="1570" x="30" y="1220" as="geometry" />
+        </mxCell>
+        <mxCell id="D1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;verticalAlign=middle;" value="HQ uploads master data file (Excel/CSV)" vertex="1">
+          <mxGeometry height="60" width="200" x="60" y="1265" as="geometry" />
+        </mxCell>
+        <mxCell id="D2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;align=center;verticalAlign=middle;" value="Controller stores file, enqueues job import-master-data [IMMEDIATE]" vertex="1">
+          <mxGeometry height="60" width="210" x="310" y="1265" as="geometry" />
+        </mxCell>
+        <mxCell id="D3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;align=center;verticalAlign=middle;" value="Worker processes rows in background" vertex="1">
+          <mxGeometry height="60" width="210" x="570" y="1265" as="geometry" />
+        </mxCell>
+        <mxCell id="D4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;align=center;verticalAlign=middle;" value="Per-row result -&gt; master_data_import_logs" vertex="1">
+          <mxGeometry height="60" width="210" x="830" y="1265" as="geometry" />
+        </mxCell>
+        <mxCell id="D5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;align=center;verticalAlign=middle;" value="HQ views import result" vertex="1">
+          <mxGeometry height="60" width="200" x="1090" y="1265" as="geometry" />
+        </mxCell>
+        <mxCell id="note_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#999999;fontSize=11;align=center;verticalAlign=middle;rounded=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontStyle=2;fontColor=#555555;whiteSpace=wrap;" value="Deliberately NOT using Redis (avoid over-engineering / out-of-scope complexity): • Interview slot booking (the actual commit step) -&gt; handled synchronously by PostgreSQL row lock (SELECT ... FOR UPDATE) + optimistic version column;   the matching-queue above only decides WHICH slot to try first, it never replaces this transaction (Section 6.4) • job_requirement concurrent edit (SM vs Sub-SM) -&gt; optimistic locking on save; needs an immediate success/conflict response, not a background job • Audit log write (audit_logs) -&gt; synchronous interceptor on the request itself; must reflect immediately, so it is not deferred to a background job • No Kafka / SNS-SQS / event-sourcing introduced — current volume (per-store candidate &amp; interview traffic) does not justify it" vertex="1">
+          <mxGeometry height="130" width="1570" x="30" y="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="eA1" edge="1" parent="1" source="A1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="A2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eA2" edge="1" parent="1" source="A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="A3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eA3" edge="1" parent="1" source="A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="A4" value="success">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eA4" edge="1" parent="1" source="A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="A5" value="fail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eA5" edge="1" parent="1" source="A5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#B85450;fontColor=#B85450;dashed=1;dashPattern=4 4;" target="A3" value="retry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eA6" edge="1" parent="1" source="A5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="A6" value="max attempts">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eE1" edge="1" parent="1" source="E1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="E2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eE2" edge="1" parent="1" source="E2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="E3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eE3" edge="1" parent="1" source="E3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="E4" value="matched">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eE4" edge="1" parent="1" source="E3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="E5" value="no match">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB1a" edge="1" parent="1" source="B1a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B1b" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB1b" edge="1" parent="1" source="B1b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B1c" value="submitted">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB1c" edge="1" parent="1" source="B1b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B1d" value="due reached">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB1d" edge="1" parent="1" source="B1d" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B1e" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB2a" edge="1" parent="1" source="B2a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B2b" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB2b" edge="1" parent="1" source="B2b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B2c" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB2c" edge="1" parent="1" source="B2c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B2d" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB3a" edge="1" parent="1" source="B3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B3b" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB3b" edge="1" parent="1" source="B3b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B3c" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB3c" edge="1" parent="1" source="B3c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B3d" value="yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB3d" edge="1" parent="1" source="B3c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B3e" value="no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB4a" edge="1" parent="1" source="B4a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B4b" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB4b" edge="1" parent="1" source="B4b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B4c" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB4c" edge="1" parent="1" source="B4c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B4d" value="yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eB4d" edge="1" parent="1" source="B4c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="B4e" value="no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eC1a" edge="1" parent="1" source="C1a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="C1b" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eC1b" edge="1" parent="1" source="C1b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="C1c" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eC1c" edge="1" parent="1" source="C1c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="C1d" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eC2a" edge="1" parent="1" source="C2a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="C2b" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eC2b" edge="1" parent="1" source="C2b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="C2c" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eC2c" edge="1" parent="1" source="C2c" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="C2d" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eD1" edge="1" parent="1" source="D1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="D2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eD2" edge="1" parent="1" source="D2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="D3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eD3" edge="1" parent="1" source="D3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="D4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eD4" edge="1" parent="1" source="D4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;strokeColor=#666666;fontColor=#666666;" target="D5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

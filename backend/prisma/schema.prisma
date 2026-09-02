@@ -1,0 +1,449 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 4. Enum/value registry
+
+enum UserStatus {
+  active
+  inactive
+}
+
+enum PublishStatus {
+  draft
+  published
+  unpublished
+}
+
+enum RequirementChannel {
+  web
+  other_media
+}
+
+enum RequirementStatus {
+  draft
+  pending_am
+  approved_am
+  pending_hq
+  approved_hq
+  rejected
+}
+
+enum ApprovalActionType {
+  submit
+  approve
+  reject
+}
+
+enum CandidateStatus {
+  received
+  survey_sent
+  survey_completed
+  no_response
+  passed
+  failed
+  interview_scheduled
+  interview_completed
+  cancelled
+  interview_adjustment_needed // Added to fix DB-001
+}
+
+enum InterviewType {
+  web
+  onsite
+}
+
+enum SlotStatus {
+  open
+  booked
+  closed
+}
+
+enum ScheduleStatus {
+  scheduled
+  changed
+  cancelled
+  completed
+}
+
+enum NotificationRecipient {
+  candidate
+  internal_user
+}
+
+enum NotificationChannel {
+  sms
+  email
+}
+
+enum NotificationStatus {
+  scheduled
+  sent
+  failed
+}
+
+enum RikuOpDirection {
+  inbound
+  outbound
+}
+
+enum RikuOpStatus {
+  success
+  failed
+}
+
+enum MasterImportType {
+  area
+  store
+  sm
+  sub_sm
+  am
+}
+
+// 5. Table definitions
+
+model Role {
+  id          String   @id @default(uuid()) @db.Uuid
+  code        String   @unique @db.VarChar(20)
+  name        String   @db.VarChar(100)
+  description String?  @db.Text
+  created_at  DateTime @default(now()) @db.Timestamptz
+  updated_at  DateTime @updatedAt @db.Timestamptz
+  users       User[]
+
+  @@map("roles")
+}
+
+model User {
+  id            String    @id @default(uuid()) @db.Uuid
+  employee_code String    @unique @db.VarChar(50)
+  email         String    @unique @db.VarChar(255)
+  password_hash String    @db.VarChar(255)
+  full_name     String    @db.VarChar(255)
+  phone         String?   @db.VarChar(20)
+  role_id       String    @db.Uuid
+  status        UserStatus @default(active)
+  last_login_at DateTime? @db.Timestamptz
+  created_by    String?   @db.Uuid
+  updated_by    String?   @db.Uuid
+  created_at    DateTime  @default(now()) @db.Timestamptz
+  updated_at    DateTime  @updatedAt @db.Timestamptz
+
+  role Role @relation(fields: [role_id], references: [id])
+  
+  area_manager_assignments AreaManagerAssignment[]
+  store_manager_assignments StoreManagerAssignment[]
+  master_data_import_logs MasterDataImportLog[]
+  approval_actions ApprovalAction[]
+  interview_slots InterviewSlot[]
+
+  @@map("users")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  actor_id    String?  @db.Uuid
+  actor_role  String?  @db.VarChar(20)
+  action      String   @db.VarChar(50)
+  entity_type String   @db.VarChar(100)
+  entity_id   String?  @db.VarChar(100)
+  before_data Json?
+  after_data  Json?
+  ip_address  String?  @db.VarChar(45)
+  user_agent  String?  @db.Text
+  created_at  DateTime @default(now()) @db.Timestamptz
+
+  @@map("audit_logs")
+}
+
+model Area {
+  id         String   @id @default(uuid()) @db.Uuid
+  code       String   @unique @db.VarChar(50)
+  name       String   @db.VarChar(255)
+  block      String?  @db.VarChar(100)
+  created_by String?  @db.Uuid
+  updated_by String?  @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz
+  updated_at DateTime @updatedAt @db.Timestamptz
+
+  stores                  Store[]
+  area_manager_assignments AreaManagerAssignment[]
+
+  @@map("areas")
+}
+
+model Store {
+  id                String   @id @default(uuid()) @db.Uuid
+  code              String   @unique @db.VarChar(50)
+  name              String   @db.VarChar(255)
+  area_id           String   @db.Uuid
+  prefecture        String?  @db.VarChar(100)
+  address           String?  @db.Text
+  allow_car_commute Boolean  @default(true)
+  publish_status    PublishStatus
+  created_by        String?  @db.Uuid
+  updated_by        String?  @db.Uuid
+  created_at        DateTime @default(now()) @db.Timestamptz
+  updated_at        DateTime @updatedAt @db.Timestamptz
+
+  area Area @relation(fields: [area_id], references: [id])
+  
+  store_manager_assignments StoreManagerAssignment[]
+  job_requirements          JobRequirement[]
+  candidates                Candidate[]
+  interview_slots           InterviewSlot[]
+  interview_schedules       InterviewSchedule[]
+
+  @@map("stores")
+}
+
+model AreaManagerAssignment {
+  id         String   @id @default(uuid()) @db.Uuid
+  area_id    String   @db.Uuid
+  am_user_id String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz
+
+  area Area @relation(fields: [area_id], references: [id])
+  am   User @relation(fields: [am_user_id], references: [id])
+
+  @@unique([area_id, am_user_id])
+  @@map("area_manager_assignments")
+}
+
+model StoreManagerAssignment {
+  id         String   @id @default(uuid()) @db.Uuid
+  store_id   String   @db.Uuid
+  user_id    String   @db.Uuid
+  is_primary Boolean
+  created_at DateTime @default(now()) @db.Timestamptz
+  updated_at DateTime @updatedAt @db.Timestamptz
+
+  store Store @relation(fields: [store_id], references: [id])
+  user  User  @relation(fields: [user_id], references: [id])
+
+  @@unique([store_id, user_id])
+  @@map("store_manager_assignments")
+}
+
+model MasterDataImportLog {
+  id           String   @id @default(uuid()) @db.Uuid
+  import_type  MasterImportType
+  file_name    String   @db.VarChar(255)
+  imported_by  String   @db.Uuid
+  total_rows   Int
+  success_rows Int
+  failed_rows  Int
+  error_detail Json?
+  created_at   DateTime @default(now()) @db.Timestamptz
+
+  importer User @relation(fields: [imported_by], references: [id])
+
+  @@map("master_data_import_logs")
+}
+
+model JobRequirement {
+  id                   String             @id @default(uuid()) @db.Uuid
+  store_id             String             @db.Uuid
+  channel              RequirementChannel
+  status               RequirementStatus
+  current_version_id   String?            @db.Uuid
+  published_version_id String?            @db.Uuid
+  created_by           String?            @db.Uuid
+  updated_by           String?            @db.Uuid
+  created_at           DateTime           @default(now()) @db.Timestamptz
+  updated_at           DateTime           @updatedAt @db.Timestamptz
+
+  store             Store @relation(fields: [store_id], references: [id])
+  
+  versions          JobRequirementVersion[]
+
+  @@unique([store_id, channel])
+  @@map("job_requirements")
+}
+
+model JobRequirementVersion {
+  id                 String   @id @default(uuid()) @db.Uuid
+  job_requirement_id String   @db.Uuid
+  version_no         Int
+  payload            Json
+  submitted_by       String?  @db.Uuid
+  submitted_at       DateTime? @db.Timestamptz
+  created_at         DateTime @default(now()) @db.Timestamptz
+
+  job_requirement JobRequirement @relation(fields: [job_requirement_id], references: [id])
+  
+  approval_actions ApprovalAction[]
+
+  @@unique([job_requirement_id, version_no])
+  @@map("job_requirement_versions")
+}
+
+model ApprovalAction {
+  id                         String   @id @default(uuid()) @db.Uuid
+  job_requirement_version_id String   @db.Uuid
+  actor_id                   String   @db.Uuid
+  action                     ApprovalActionType
+  comment                    String?  @db.Text
+  created_at                 DateTime @default(now()) @db.Timestamptz
+
+  job_requirement_version JobRequirementVersion @relation(fields: [job_requirement_version_id], references: [id])
+  actor                   User                  @relation(fields: [actor_id], references: [id])
+
+  @@map("approval_actions")
+}
+
+model BlacklistEntry {
+  id         String   @id @default(uuid()) @db.Uuid
+  full_name  String?  @db.VarChar(255)
+  phone      String?  @db.VarChar(20)
+  email      String?  @db.VarChar(255)
+  reason     String?  @db.Text
+  created_by String?  @db.Uuid
+  updated_by String?  @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz
+  updated_at DateTime @updatedAt @db.Timestamptz
+
+  @@index([phone])
+  @@index([email])
+  @@map("blacklist_entries")
+}
+
+model Candidate {
+  id                  String   @id @default(uuid()) @db.Uuid
+  rikuop_candidate_id String?  @unique @db.VarChar(100) // DB-006: make optional for manual registrations
+  full_name           String   @db.VarChar(255)
+  phone               String?  @db.VarChar(20)
+  email               String?  @db.VarChar(255)
+  store_id            String?  @db.Uuid
+  status              CandidateStatus
+  is_duplicate        Boolean  @default(false)
+  is_blacklisted      Boolean  @default(false)
+  source              String?  @db.VarChar(50)
+  created_at          DateTime @default(now()) @db.Timestamptz
+  updated_at          DateTime @updatedAt @db.Timestamptz
+
+  store               Store?   @relation(fields: [store_id], references: [id])
+  
+  survey_tokens       CandidateSurveyToken[]
+  survey_response     CandidateSurveyResponse?
+  interview_schedules InterviewSchedule[]
+
+  @@map("candidates")
+}
+
+model CandidateSurveyToken {
+  id           String    @id @default(uuid()) @db.Uuid
+  candidate_id String    @db.Uuid
+  token_hash   String    @unique @db.VarChar(255)
+  expires_at   DateTime  @db.Timestamptz
+  used_at      DateTime? @db.Timestamptz
+  created_at   DateTime  @default(now()) @db.Timestamptz
+
+  candidate Candidate @relation(fields: [candidate_id], references: [id])
+
+  @@map("candidate_survey_tokens")
+}
+
+model CandidateSurveyResponse {
+  id                     String   @id @default(uuid()) @db.Uuid
+  candidate_id           String   @unique @db.Uuid
+  desired_store_ids      Json
+  experience             String?  @db.Text
+  desired_working_hours  Json?
+  desired_period         String?  @db.VarChar(100)
+  desired_days_per_week  String?  @db.VarChar(50)
+  other_conditions       String?  @db.Text
+  event_work             Boolean  @default(false)
+  contact_available_days Json?
+  contact_available_time Json?
+  car_commute_note       String?  @db.Text
+  interview_type         InterviewType
+  preferred_dates        Json
+  submitted_at           DateTime @db.Timestamptz
+
+  candidate Candidate @relation(fields: [candidate_id], references: [id])
+
+  @@map("candidate_survey_responses")
+}
+
+model InterviewSlot {
+  id         String   @id @default(uuid()) @db.Uuid
+  store_id   String   @db.Uuid
+  sm_user_id String   @db.Uuid
+  slot_date  DateTime @db.Date
+  start_time DateTime @db.Time
+  end_time   DateTime @db.Time
+  status     SlotStatus
+  note       String?  @db.Text
+  version    Int
+  created_by String?  @db.Uuid
+  updated_by String?  @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz
+  updated_at DateTime @updatedAt @db.Timestamptz
+
+  store      Store @relation(fields: [store_id], references: [id])
+  sm         User  @relation(fields: [sm_user_id], references: [id])
+
+  interview_schedule InterviewSchedule?
+
+  @@unique([sm_user_id, slot_date, start_time])
+  @@map("interview_slots")
+}
+
+model InterviewSchedule {
+  id               String   @id @default(uuid()) @db.Uuid
+  candidate_id     String   @db.Uuid
+  slot_id          String   @unique @db.Uuid
+  store_id         String   @db.Uuid
+  status           ScheduleStatus
+  interview_type   InterviewType
+  location_info    Json?
+  reminder_sent_at DateTime? @db.Timestamptz
+  created_by       String?  @db.Uuid
+  updated_by       String?  @db.Uuid
+  created_at       DateTime @default(now()) @db.Timestamptz
+  updated_at       DateTime @updatedAt @db.Timestamptz
+
+  candidate Candidate @relation(fields: [candidate_id], references: [id])
+  slot      InterviewSlot @relation(fields: [slot_id], references: [id])
+  store     Store @relation(fields: [store_id], references: [id])
+
+  @@map("interview_schedules")
+}
+
+model Notification {
+  id              String   @id @default(uuid()) @db.Uuid
+  recipient_type  NotificationRecipient
+  recipient_id    String   @db.Uuid
+  channel         NotificationChannel
+  template_code   String   @db.VarChar(100)
+  payload         Json?
+  status          NotificationStatus
+  idempotency_key String   @unique @db.VarChar(255)
+  scheduled_at    DateTime @db.Timestamptz
+  sent_at         DateTime? @db.Timestamptz
+  retry_count     Int      @default(0)
+  error_message   String?  @db.Text
+  created_at      DateTime @default(now()) @db.Timestamptz
+
+  @@map("notifications")
+}
+
+model RikuopSyncLog {
+  id               String   @id @default(uuid()) @db.Uuid
+  direction        RikuOpDirection
+  entity_type      String   @db.VarChar(50)
+  entity_id        String?  @db.VarChar(100)
+  request_payload  Json?
+  response_payload Json?
+  status           RikuOpStatus
+  error_message    String?  @db.Text
+  created_at       DateTime @default(now()) @db.Timestamptz
+
+  @@map("rikuop_sync_logs")
+}
